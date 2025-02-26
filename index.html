@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Box</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Secure Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,6 +13,7 @@
             height: 100vh;
             background-color: black; /* Full background black */
             margin: 0;
+            overflow: hidden; /* Disable scrolling */
         }
         .container {
             width: 1280px;
@@ -21,13 +22,57 @@
         .image-box {
             width: 1280px;
             height: 450px;
+            pointer-events: none; /* Disable interactions */
         }
         .image-box img {
             width: 100%;
             height: 100%;
             object-fit: cover; /* Ensures the image covers the box */
+            user-drag: none;
+            -webkit-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            -ms-user-drag: none;
+            pointer-events: none; /* Disable right-click and interactions */
         }
     </style>
+    <script>
+        // Disable right-click
+        document.addEventListener("contextmenu", function(e) {
+            e.preventDefault();
+        });
+
+        // Disable keyboard shortcuts for inspect element
+        document.addEventListener("keydown", function(e) {
+            if (
+                e.ctrlKey && (e.key === "u" || e.key === "U" || e.key === "s" || e.key === "S" || 
+                e.key === "i" || e.key === "I" || e.key === "j" || e.key === "J" || e.key === "h" || e.key === "H") || 
+                e.key === "F12"
+            ) {
+                e.preventDefault();
+            }
+        });
+
+        // Detect if DevTools is open
+        setInterval(function() {
+            let devtools = /./;
+            devtools.toString = function() { 
+                alert("Inspect ko close karo warna website access nahi milega!"); 
+                window.location.href = "about:blank"; // Redirect to blank page
+            };
+            console.log(devtools);
+        }, 1000);
+
+        // Detect if website is opened in iframe (to prevent inspecting from another website)
+        if (window.self !== window.top) {
+            document.body.innerHTML = "<h1 style='color:white; text-align:center;'>Inspect disable karo phir website open hogi!</h1>";
+            setInterval(() => {
+                if (window.self === window.top) {
+                    location.reload();
+                }
+            }, 1000);
+        }
+    </script>
 </head>
 <body>
     <div class="container">
